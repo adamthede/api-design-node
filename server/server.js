@@ -54,5 +54,12 @@ app.put('/lions/:id', function(req, res){
 	}
 });
 
+app.delete('/lions/:id', function(req, res){
+    var lionIndex = _.findIndex(lions, req.params.id);
+    var lion = _.find(lions, {id: req.params.id});
+    lions.splice(lionIndex,1);
+    res.json(lion);
+});
+
 app.listen(3000);
 console.log('on port 3000');
