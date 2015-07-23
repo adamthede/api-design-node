@@ -4,12 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "mocha serve/spec.js"
+=======
+    "start": "nodemon index.js",
+    "test": ""
+>>>>>>> c63842f3b4cd30de6eeda186b67d14103e7085f6
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.2",
+    "colors": "^1.1.2",
     "express": "^4.13.1",
     "lodash": "^3.10.0",
     "morgan": "^1.6.1"
