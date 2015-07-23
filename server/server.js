@@ -19,66 +19,74 @@ var lions = [];
 var id = 0;
 
 var updateId = function(req, res, next) {
-  // fill this out. this is the route middleware for the ids
-  if(!req.body.id) {
-      id++;
-      req.body.id = id + '';
-  }
-  next();
+	// fill this out. this is the route middleware for the ids
+	if (!req.body.id) {
+		id++;
+		req.body.id = id + '';
+	}
+	next();
 };
 
 app.use(morgan('dev'));
 app.use(express.static('client'));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 app.use(bodyParser.json());
 
 app.param('id', function(req, res, next, id) {
-  // fill this out to find the lion based off the id
-  // and attach it to req.lion. Rember to call next()
-  var lion = _.find(lions, {id:id});
+	// fill this out to find the lion based off the id
+	// and attach it to req.lion. Rember to call next()
+	var lion = _.find(lions, {
+		id: id
+	});
 
-  if(lion) {
-      req.lion = lion;
-      next();
-  } else {
-      res.send();
-  }
+	if (lion) {
+		req.lion = lion;
+		next();
+	} else {
+		res.send();
+	}
 });
 
-app.get('/lions', function(req, res){
-  res.json(lions);
+app.get('/lions', function(req, res) {
+	res.json(lions);
 });
 
-app.get('/lions/:id', function(req, res){
-  var lion = req.lion;
-  res.json(lion || {});
+app.get('/lions/:id', function(req, res) {
+	var lion = req.lion;
+	res.json(lion || {});
 });
 
 app.post('/lions', updateId, function(req, res) {
-  var lion = req.body;
-  lions.push(lion);
-  res.json(lion);
+	var lion = req.body;
+	lions.push(lion);
+	res.json(lion);
 });
 
 app.put('/lions/:id', function(req, res) {
-  var update = req.body;
-  if (update.id) {
-    delete update.id;
-  }
+	var update = req.body;
+	if (update.id) {
+		delete update.id;
+	}
 
-  var lion = _.findIndex(lions, {id: req.params.id});
-  if (!lions[lion]) {
-    res.send();
-  } else {
-    var updatedLion = _.assign(lions[lion], update);
-    res.json(updatedLion);
-  }
+	var lion = _.findIndex(lions, {
+		id: req.params.id
+	});
+	if (!lions[lion]) {
+		res.send();
+	} else {
+		var updatedLion = _.assign(lions[lion], update);
+		res.json(updatedLion);
+	}
 });
 
-app.delete('/lions/:id', function(req, res){
-    var lion = _.findIndex(lions, {id:req.params.id});
-    lions.splice(lion,1);
-    res.json(req.lion);
+app.delete('/lions/:id', function(req, res) {
+	var lion = _.findIndex(lions, {
+		id: req.params.id
+	});
+	lions.splice(lion, 1);
+	res.json(req.lion);
 });
 
 app.listen(3000);
