@@ -13,8 +13,10 @@ var updateId = function(req, res, next) {
 	if (!req.body.id) {
 		id++;
 		req.body.id = id + '';
+		next();
+	} else {
+		res.send();
 	}
-	next();
 };
 
 tigerRouter.param('id', function(req, res, next, id) {

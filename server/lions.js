@@ -58,11 +58,13 @@ lionRouter.put('/:id', function(req, res) {
 });
 
 lionRouter.delete('/:id', function(req, res) {
-	var lion = _.findIndex(lions, {
-		id: req.params.id
-	});
-	lions.splice(lion, 1);
-	res.json(req.lion);
+	var lion = _.findIndex(lions, {id: req.params.id});
+	if(!lions[lion]) {
+		res.send();
+	} else {
+		lions.splice(lion,1);
+		res.json(req.lion);
+	}
 });
 
 module.exports = lionRouter;
