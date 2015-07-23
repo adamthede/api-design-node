@@ -13,6 +13,14 @@ var config = {
 process.env.NODE_ENV = process.env.NODE_ENV || config.dev;
 // set config.env to whatever the NODE_ENV is
 config.env = process.env.NODE_ENV;
+
+try {
+    envConfig = require('./' + config.env);
+    envConfig = envConfig || {};
+} catch(e){
+    envConfig = {};
+}
+
 // TODO
 // envConfig is nothing right now, but it should be an object.
 // depending on what ever config.env is, load up the appropriate file
