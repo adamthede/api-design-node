@@ -56,9 +56,13 @@ app.put('/lions/:id', function(req, res){
 
 app.delete('/lions/:id', function(req, res){
     var lionIndex = _.findIndex(lions, req.params.id);
-    var lion = _.find(lions, {id: req.params.id});
-    lions.splice(lionIndex,1);
-    res.json(lion);
+	if(!lions[lionIndex]){
+		res.send();
+	} else {
+		var deletedLion = lions[lionIndex];
+		lions.splice(lionIndex,1);
+		res.json(deletedLion);
+	}
 });
 
 app.listen(3000);
