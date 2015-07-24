@@ -31,9 +31,7 @@ exports.getOne = function(req, res, next) {
 
 exports.put = function(req, res, next) {
   var category = req.category;
-
   var update = req.body;
-
   _.merge(category, update);
 
   category.save(function(err, saved) {
