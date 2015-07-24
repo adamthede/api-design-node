@@ -17,6 +17,8 @@ exports.params = function(req, res, next, id) {
 
 exports.get = function(req, res, next) {
 	Post.find({})
+		.populate('author categories')
+		.exec()
         .then(function(posts){
             if(!posts) {
                 next(new Error('No posts!'));
