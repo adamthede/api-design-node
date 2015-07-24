@@ -13,7 +13,6 @@ exports.decodeToken = function() {
     if (req.query && req.query.hasOwnProperty('access_token')) {
       req.headers.authorization = 'Bearer ' + req.query.access_token;
     }
-
     // this will call next if token is valid
     // and send error if its not. It will attached
     // the decoded token to req.user
@@ -23,6 +22,17 @@ exports.decodeToken = function() {
 
 exports.getFreshUser = function() {
   return function(req, res, next) {
+      User.findById(req.user._id)
+        .then(function(user){
+            if(!user) {
+                res.status(400).send('unauthorized');
+            } else {
+                req.user = user;
+                next();
+            }
+        }, function(err){
+            next(err);
+        });
     // we'll have access to req.user here
     // because we'll use decodeToken in before
     // this function in the middleware stack.
@@ -46,15 +56,31 @@ exports.verifyUser = function() {
     var password = req.body.password;
 
     // if no username or password then stop.
+    if(!username || !password) {
+        res.status(400).send('you need a username and password');
+        return;
+    }
 
     // look user up in the DB so we can check
     // if the passwords match for the username
-
     // use the authenticate() method on a user doc. Passin
     // in the posted password, it will hash the
     // password the same way as the current passwords got hashed
-
-
+    User.findOne({username: username})
+        .then(function(user){
+            if(!user) {
+                res.status(401).send('no user with the given username');
+            } else {
+                if(!user.authenticate(password)) {
+                    res.status(401).send('wrong password');
+                } else {
+                    req.user = user;
+                    next();
+                }
+            }
+        }, function(err){
+            next(err);
+        });
   };
 };
 
